@@ -1,25 +1,40 @@
 package dev.java10x.cadastroDeNinjas.Controller;
 
 import dev.java10x.cadastroDeNinjas.DTO.CreateNinjaDTO;
+import dev.java10x.cadastroDeNinjas.DTO.IdNinjaDTO;
+import dev.java10x.cadastroDeNinjas.Entity.NinjaEntity;
+import dev.java10x.cadastroDeNinjas.Service.NinjaService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/ninja/v1/")
 public class NinjaController {
 
-    /*
-    Here's how you'll develop the logic...
-    NOTE: If you want to make it more organized, create a service and put the logic inside.
-*/
-    @PostMapping(path = "create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> createNinja(@RequestBody CreateNinjaDTO data){
+    @Autowired
+    private NinjaService ninjaService;
 
-        return ResponseEntity.ok().body("Return some message");
+    @PostMapping(path = "create", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<NinjaEntity> createNinjaController(@Valid @RequestBody CreateNinjaDTO data){
+
+        return ninjaService.createNinjaService(data);
+
+    }
+
+    @GetMapping(path = "get/{id}", produces = "application/json")
+    public ResponseEntity<NinjaEntity> getNinjaController(@PathVariable Long id){
+
+        return ninjaService.getNinjaService(new IdNinjaDTO(id));
+
+    }
+
+    @DeleteMapping(path = "delete/{id}", produces = "application/json")
+    public ResponseEntity<Void> deleteNinjaController(@PathVariable Long id){
+
+        return ninjaService.deleteNinjaService(id);
 
     }
 }
